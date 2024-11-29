@@ -46,7 +46,8 @@ class Crawler:
     def separateWords(self, text):
         words = re.split(r'\W+', text)
         cleaned_words = [re.sub(r'\d+', '', word.lower()) for word in words if word]
-        return [word for word in cleaned_words if word]
+        filtered_words = [word.lower() for word in cleaned_words if re.fullmatch(r'[а-яА-ЯёЁ]+', word)]
+        return filtered_words
 
 ### 3. Обход страниц и индексация
     def isIndexed(self, url):
@@ -100,6 +101,6 @@ class Crawler:
 # Пример использования
 if __name__ == "__main__":
     crawler = Crawler("searchindex.db")
-    seedUrls = ["https://lenta.ru/"]
+    seedUrls = ["https://lenta.ru/", "https://rbc.ru/"]
     crawler.crawl(seedUrls, maxDepth=2)
     crawler.monitorIndex()
